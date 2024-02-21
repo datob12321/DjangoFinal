@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Teach{% endblock %}
+
+{% block content %}
+    {% for message in messages%}
+        <h1>{{ message }}</h1>
+    {% endfor %}
+    <h1>Teaching {{ language.name }}</h1>
+    <form method="POST" action="{% url 'add_word' language.name %}">
+    {% csrf_token %}
+        <input type="text" name="word" placeholder="word">
+        <input type="text" name="translate" placeholder="translate">   
+        <input type="submit" value="Add new word" name="">
+        <input type="hidden" name="lang" value="{{ language.name }}">
+    </form>
+    
+{% endblock %}

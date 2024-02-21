@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    
+    {% for message in messages %}
+        <h1>{{ message }}</h1>
+    {% endfor %}
+        <div class="form-div">
+  <h2>Reset the password:</h2>
+    <form action="{% url 'reset_password' %}" method="POST" class="user-form">
+        {% csrf_token %}
+        <h3>Old password:</h3>
+        <input type="text" placeholder="old password" name="old_password" required class="user-input">
+        <h3>New password:</h3>
+        <input type="password" placeholder="new password" name="new_password" required class="user-input">
+        <h3>Repeat the password:</h3>
+        <input type="password" placeholder="new password" name="new_password_2" required class="user-input">
+        <div class="button-div">
+          <button type="submit" class="user-button">Reset</button>
+        </div>
+
+    </form>
+   
+</div>
+{% endblock %}

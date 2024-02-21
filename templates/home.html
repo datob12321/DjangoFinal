@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {% for message in messages %}
+        <h1>{{ message }}</h1>
+    {% endfor %}
+    <br>
+    
+    {% if user.is_authenticated %}
+        <span>Welcome {{ user.username }}</span>
+        {% else %}
+        <span>Welcome</span>
+    {% endif %}
+    
+    <div class="main-home">
+    <div class="main-left">
+        <div class="above">
+            <div class="img-container-l">
+            <img src="https://media.cnn.com/api/v1/images/stellar/prod/underscored-best-language-learning-apps-lead-image3.jpeg?q=h_900,w_1600,x_0,y_0" alt="could not load">    
+            <h1><a href="{% url 'learn'%}">Learn</a></h1>
+            </div>
+            
+        </div>
+        <div class="down">
+            <div class="img-container-t">
+            <img src="https://img.freepik.com/free-photo/medium-shot-woman-teaching-lesson_23-2149272233.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1708300800&semt=sph">
+                <h1><a href="{% url 'teach'%}">Teach</a></h1>
+                </div>
+        </div>
+    </div>
+    <div class="main-right">
+        <div class="above">
+            <span>If you want to start learning a new language You have entered at a correct address! You can choose the language you want to learn and our teachers will help you to easily pick up some basic words and gramma rules, discover native expressions. Do you have a wish to learn more than one language? Don't worry! The great thing is that You can choose several language at the same time. Wait, wait! Are you a teacher? We have some work for you, too. If you want to cooperate with us visit the link below!</span>
+
+        </div>
+        <div class="down"></div>
+    </div>
+    </div>
+    
+{% endblock%}
