@@ -3,5 +3,116 @@
 {% block title %}Learn{% endblock %}
 
 {% block content %}
+    <div class="main-list">
     <h1>Learning {{ language.name }}</h1>
+    <ul class="content-list">
+    <li><a href="{% url 'learn_words' language.name %}">Words</a></li>
+    <li><a href="{% url 'grammar_topics' language.name %}">Grammar</a></li>
+    <li><a href="{% url 'slangs' language.name %}">Expressions and slangs</a></li>
+    </ul>
+    <a href="#" onclick="show_window()">Make a question</a>
+    <div id="question">
+        <h1>You can make a question</h1>
+        <textarea cols="30" rows="10"></textarea>
+        <div class="buttons">
+            <button class="btn btn-color">Make a question</button>
+            <button class="btn btn-color" onclick="close_window()">Close the window</button>
+        </div>
+        
+    </div>
+
+    </div>
+
+
+    <style>
+
+    .main-list{
+        width: 80%;
+        margin: auto;
+        display: flex;
+        gap: 30px;
+        flex-direction: column;
+        background-color: #101052;
+        color: aquamarine;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .content-list{
+        display: flex;
+        gap: 20px;
+        list-style-type: none;
+        justify-content: space-around;
+    }
+
+    .content-list a{
+        text-decoration: none;
+        font-size: 30px;
+    }
+    .content-list li{
+        background-color: brown;
+        padding: 10px;
+        border: solid #6868b0 2px;
+        border-radius: 5px;
+    }
+
+    .content-list li:hover{
+        background-color: #911f1f;
+    }
+    
+    .buttons{
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+    }
+    
+    .buttons button{
+        width: 48%;
+        box-sizing: border-box;
+        border: solid #4b1804;
+        
+        
+    }
+    
+    .btn-color{
+        color: #100602;
+        font-weight: bold;
+        background-color: #a8490e;
+    }
+
+
+    #question{
+        display: none;
+        background-color: #be500c;
+        height: fit-content;
+        border: solid #9eefef 3px;
+        border-radius: 5px;
+        width: 600px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        gap: 10px;
+        transform: translate(-50%, -50%);
+        justify-content: center;
+        text-align: center;
+        padding-top: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-bottom: 5px;
+        
+        
+    }
+
+
+    </style>
+    <script>
+    function show_window(){
+        document.getElementById("question").style.display='flex'
+        document.getElementById("question").style.flexDirection='column'
+    }
+
+    function close_window(){
+        document.getElementById("question").style.display='none'
+    }
+    </script>
 {% endblock %}

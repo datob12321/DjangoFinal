@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Grammar list{% endblock %}
+
+{% block content %}
+    <h1>Grammar list</h1>
+    <br>
+    {% for topic in topics %}
+        <h1>{{ topic.topic }}</h1>
+    {% endfor %}
+
+{% endblock %}
