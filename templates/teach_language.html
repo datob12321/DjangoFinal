@@ -18,6 +18,7 @@
         <div id="add-slang">
             <button id="btn-create">Add some expression or slang</button>
         </div>
+    <a href="{% url 'questions_view' language.name %}"><h4>See questions</h4></a>
     </div>
     
     
@@ -38,13 +39,13 @@
     {% csrf_token %}
         <label>Select a topic</label>
         <select name="topic_name">
-            <option>verb</option>
-            <option>noun</option>
-            <option>preposition</option>
-            <option>pronoun</option>
+            <option>verbs</option>
+            <option>nouns</option>
+            <option>prepositions</option>
+            <option>pronouns</option>
         </select>
         <input type="text" name="lesson_name" placeholder="name of the grammar lesson">
-        <textarea name="grammar_text" placeholder="write grammar content here:"></textarea>   
+        <textarea name="grammar_text"  required placeholder="write grammar content here:"></textarea>   
         <div class="buttons">
             <input type="submit" value="Add grammar content " name="">
             <button id="close_1">Close</button>

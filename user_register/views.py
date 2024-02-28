@@ -18,6 +18,7 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
         password2 = request.POST['password2']
+        profile_img = request.POST['profile_img']
         if password != password2:
             messages.error(request, 'Passwords do not match!')
             return redirect('register')
