@@ -7,13 +7,17 @@
         <h1>{{ message }}</h1>
     {% endfor %}
     <div class="main-list">
-    <h1>Learning {{ language.name }}</h1>
+        <div class="language_div">
+            <h1>Learning {{ language.name }} </h1>
+        <img height="100px" width="100px" src="{{ language.img_url }}">
+        </div>
+
     <ul class="content-list">
-    <li><a href="{% url 'learn_words' language.name %}">Words</a></li>
-    <li><a href="{% url 'grammar_topics' language.name %}">Grammar</a></li>
-    <li><a href="{% url 'slangs' language.name %}">Expressions and slangs</a></li>
+    <li class="half"><a href="{% url 'learn_words' language.name %}">Words</a></li>
+    <li class="half"><a href="{% url 'grammar_topics' language.name %}">Grammar</a></li>
+    <li class="full"><a href="{% url 'slangs' language.name %}">Expressions and slangs</a></li>
     </ul>
-    <a href="#" onclick="show_window()">Make a question</a>
+
     <form id="question" method="POST" action="{% url 'make_question' language.name %}">
         {% csrf_token %}
         <h1>You can make a question</h1>
@@ -27,41 +31,173 @@
 
     </div>
 
+    <div class="buttons-questions">
+        <button href="#" onclick="show_window()">Make a question</button>
+        <button id="my-question">see my questions</button>
+        <button id="all-question">see all questions</button>
+    </div>
 
+    
+    <div class="questions-main">
+    
+    </div>
+
+<script>
+    var currentUser = "{{ request.user.id }}";
+    var questions_json = JSON.parse('{{ json_questions | escapejs }}')
+    var answers_json = JSON.parse('{{ json_answers | escapejs }}')
+    var my_questions = document.getElementById('my-question')
+    var all_questions = document.getElementById('all-question')
+    var questions_div = document.querySelector('.questions-main')
+
+    
+
+    all_questions.addEventListener('click', function (){
+        questions_div.innerHTML=''
+        questions_div.style.display='flex'
+        for (var i=0; i< questions_json.length; i++){
+            var specific_answers = answers_json.filter((obj)=>obj.fields.address==questions_json[i].pk)
+            var questions=`<div class="question_div">
+        <p>${questions_json[i].fields.pub_date}</p>
+        <div class="question_answer">
+            <h2>${questions_json[i].fields.question_text}</h2>
+            <button class="show_answers"><p>answers: ${specific_answers.length}</p></button>
+           
+        </div>
+        <div class="answers_div">
+       
+        </div>
+            
+        </div>`
+            questions_div.innerHTML+=questions
+            
+             var answers_div = document.querySelectorAll('.answers_div')
+            
+            for (var j=0; j<specific_answers.length; j++){
+                    var answer1 = `<div class="answer">
+                        <h1>${specific_answers[j].fields.answer_text}</h1>
+                        </div>`
+                {#console.log(specific_answers[j].fields.answer_text+' - '+questions_json[i].pk)#}
+                answers_div[i].innerHTML += answer1
+            }
+        }
+    })
+    
+ 
+    var show_answers = document.querySelectorAll('.show_answers')
+    for (var i=0; i<show_answers.length; i++){
+        (function(index){
+            show_answers[i].addEventListener('click', function(){
+                answers_div[index].style.display='block'
+                console.log('sdfsd')
+            })
+        })(i) 
+    }
+    
+    my_questions.addEventListener('click', function (){
+        questions_div.innerHTML=''
+        questions_div.style.display='flex'
+        for (var i=0; i< questions_json.length; i++){
+            if (questions_json[i].fields.user == currentUser){
+                var specific_answers = answers_json.filter((obj)=>obj.fields.address==questions_json[i].pk)
+                questions_div.innerHTML+=`<div class="question_div">
+        <p>${questions_json[i].fields.pub_date}</p>
+        <div class="question_answer">
+            <h2>${questions_json[i].fields.question_text}</h2>
+             <button><p>answers: ${specific_answers.length}</p></button>
+        </div>
+        
+        </div>`
+                {#console.log(questions_json[i].pk)#}
+
+            }
+            
+        }
+    })
+    
+</script>
     <style>
+
+    body{
+        font-family: "Franklin Gothic Medium Cond";
+    }
+
+    .language_div{
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        justify-content: flex-start;
+        color: yellow;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
     .main-list{
         width: 80%;
         margin: auto;
         display: flex;
-        gap: 30px;
+        gap: 70px;
         flex-direction: column;
         background-color: #101052;
         color: aquamarine;
         padding: 15px;
-        border-radius: 5px;
+        border-radius: 50px;
+        margin-top: 10px;
+
     }
 
     .content-list{
         display: flex;
         gap: 20px;
         list-style-type: none;
-        justify-content: space-around;
+        justify-content: space-between;
+        margin: auto;
+
+        width: 100%;
     }
 
     .content-list a{
         text-decoration: none;
-        font-size: 30px;
+        font-size: 35px;
+        color: floralwhite;
     }
     .content-list li{
-        background-color: brown;
+        background-color: #af1f06;
         padding: 10px;
-        border: solid #6868b0 2px;
-        border-radius: 5px;
+        border: solid #f1e4bd 2px;
+        border-radius: 25px;
     }
 
     .content-list li:hover{
         background-color: #911f1f;
+    }
+
+    .buttons-questions{
+        width: 40%;
+        margin: auto;
+        display: flex;
+        gap: 20px;
+        background-color: darkgoldenrod;
+        justify-content: space-around;
+        padding: 15px;
+        margin-top: 30px;
+        border-width: 4px;
+        border: solid #020249;
+        border-radius: 100px;
+
+    }
+
+    .buttons-questions button{
+         padding: 15px;
+        border-width: 4px;
+        border: solid #92d2d2;
+        border-radius: 30px;
+        font-family: "Franklin Gothic Book";
+        font-weight: bolder;
+        background-color: #1d1d57;
+        font-size: 15px;
+        color: #bcd7d7;
+
     }
     
     .buttons{
@@ -84,6 +220,17 @@
         background-color: #a8490e;
     }
 
+.questions-main{
+    background-color: #671405;
+    display: none;
+    flex-direction: column;
+    margin: auto;
+    width:80%;
+    margin-top: 40px;
+    padding: 15px;
+    gap: 10px;
+
+}
 
     #question{
         display: none;
@@ -107,7 +254,36 @@
         
     }
 
-
+    .question_div{
+        display: flex;
+        flex-direction: column;
+        background-color: forestgreen;
+        padding: 5px;
+        border-radius: 10px;
+    }
+    
+    .question_div button p{
+        text-decoration: none;
+        color: cornflowerblue;
+        font-size: 20px;
+    }
+    
+    .question_div button{
+        background: none;
+        border: none;
+    }
+    
+    .question_answer{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        
+    }
+    
+    .answers_div{
+        display: none
+    }
     </style>
     <script>
     function show_window(){
@@ -118,5 +294,153 @@
     function close_window(){
         document.getElementById("question").style.display='none'
     }
+    
+
     </script>
+
+    <style>
+    @media  screen and (max-width: 1115px) {
+        .language_div{
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .language_div h1{
+            font-size: 50px;
+        }
+
+        .content-list{
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .content-list a{
+            font-size: 30px;
+            padding: 10px;
+        }
+
+        .buttons-questions{
+            width: 80%;
+            border-radius: 50px;
+            padding: 20px;
+        }
+
+        .buttons-questions button{
+            font-size: 35px;
+            border-radius: 50px;
+        }
+    }
+
+    @media screen and (max-width: 900px ) {
+    .content-list{
+            flex-wrap: wrap;
+        }
+
+       .full{
+           width: 100%;
+       }
+
+        .half{
+            width: 48%
+        }
+
+        .main-list{
+            width: 90%;
+        }
+
+        .buttons-questions{
+            width: 90%;
+            border-radius: 50px;
+            padding: 20px;
+        }
+
+        .buttons-questions button{
+            font-size: 25px;
+            border-radius: 50px;
+        }
+    }
+
+    @media screen and (max-width: 730px) {
+        #question{
+            width: 70%;
+        }
+    }
+
+    @media screen and (max-width: 645px) {
+        .content-list{
+            flex-direction: column;
+        }
+
+        .content-list a{
+            width: 100%;
+            font-size: 20px;
+        }
+
+        .buttons-questions button{
+            font-size: 15px;
+            border-radius: 20px;
+        }
+
+        .buttons-questions{
+            border-radius: 30px;
+        }
+
+        .half{
+            width: 100%;
+        }
+    }
+
+     @media screen and (max-width: 627px) {
+         .language_div h1{
+            font-size: 40px;
+        }
+
+         .language_div img{
+             display: none;
+         }
+         
+         .main-list{
+             gap: 30px;
+         }
+         
+          .language_div{
+            justify-content: center;
+        }
+
+         .content-list{
+             margin-left: -10px;
+         }
+    }
+    
+    @media screen and (max-width: 400px){
+        .language_div h1{
+            font-size: 30px;
+        }
+        
+        .buttons-questions{
+            border-radius: 30px;
+            padding: 10px;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+        }
+        
+        .buttons-questions button{
+            
+            border-radius: 20px;
+        }
+       
+    }
+    
+    @media screen and (max-width: 330px) {
+        .content-list{
+            text-align: center;
+        }
+        .language_div h1{
+            font-size: 20px;
+        }
+    }
+
+    </style>
 {% endblock %}

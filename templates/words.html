@@ -6,33 +6,84 @@
     
     <input type="text" id="search-bar" onkeyup="search_func()">
     <div id="dictionary">
-         {% for word in all_words %}
+        <h1 class="not_found">Not found!</h1>
+         {% for word in page_words %}
              <h2 class="word">{{ word.word_name }} - {{ word.translate }}</h2>
+         {% endfor %}
+    
+        {% for word in json_words %}
+             <h2 class="dict_word">{{ word.word }} - {{ word.translate }}</h2>
          {% endfor %}
     </div>
     
-    <script>
+    <nav aria-label="Page navigation example">
+  <ul class="pagination">
+
+      {% if page_words.has_previous %}
+          <li class="page-item">
+        <a class="page-link" href="?page=1" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+              <li class="page-item"><a class="page-link" href="?page={{ page_words.previous_page_number }}">{{ page_words.previous_page_number }}</a></li>
+              
+      {% endif %}
+  
+  
+                <li class="page-item active"><a class="page-link" href="?page={{ page_words.number }}">{{ page_words.number }}</a></li>
+      {% if page_words.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_words.next_page_number }}">{{ page_words.next_page_number }}</a></li>
+              <li class="page-item">
+      <a class="page-link" href="?page={{ page_words.paginator.num_pages }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
     
+    
+    <script>
+    var dict_div = document.querySelector('#dictionary')
+    var json_words = {{ json_words | safe }}
     
     function search_func(){
-        dict_div = document.querySelector('#dictionary')
-        search_bar=document.getElementById('search-bar')
-        search_text = search_bar.value.toLowerCase()
-        words = document.getElementsByClassName('word')
-        var empty = false
-        for (let i=0; i<words.length; i++){
-            if (words[i].textContent.toLowerCase().startsWith(search_text)){
-                words[i].style.display = '';
-                empty = true
+        var page_words = document.querySelectorAll('.word')
+        for (var word of page_words){
+            word.style.display='none'
+        }
+        var search_bar = document.getElementById('search-bar')
+        var search_text = search_bar.value.toLowerCase()
+        
+        var word_divs =document.querySelectorAll('.dict_word')
+        var empty = true
+        for (let i=0; i<json_words.length; i++){
+            if (json_words[i].word.toLowerCase().startsWith(search_text) ||
+                json_words[i].translate.startsWith(search_text)){
+                word_divs[i].style.display = 'block';
+                empty = false
                 
             }else
             {
-                words[i].style.display = 'none';
+               word_divs[i].style.display = 'none';
                 
             }
         }
-        if (dict_div.innerHTML==''){
-            dict_div.innerHTML='sdfsdf'
+        
+        if (search_text == ''){
+            for (let i=0; i<json_words.length; i++){
+               word_divs[i].style.display = 'none';
+        }
+            for (var word of page_words){
+            word.style.display='block'
+        }
+            
+        }
+        var not_found = document.querySelector('.not_found')
+        if (empty){
+            not_found.style.display = 'block'
+        }else {
+            not_found.style.display = 'none'
         }
     }
     </script>
@@ -49,6 +100,14 @@
         gap: 5px;
         margin-left: auto;
         margin-right: 5%;
+    }
+    
+    .dict_word{
+        display: none;
+    }
+    
+    .not_found{
+        display: none;
     }
     </style>
 {% endblock %}

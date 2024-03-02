@@ -4,6 +4,9 @@ from languages.models import Language
 from teach.models import GrammarTopic, Slang
 from django.urls import reverse
 from django.contrib import messages
+from .models import Question
+from teach.models import Answer
+from django.core import paginator
 
 # Create your views here.
 
@@ -15,15 +18,28 @@ def learn(request):
 
 def learn_language(request, language):
     language_name = Language.objects.filter(name=language).first()
-    return render(request, 'learn_language.html', {'language': language_name})
+    questions = Question.objects.filter(language=language_name)
+    questions_json = serializers.serialize('json', questions)
+    answers = Answer.objects.all()
+    answers_json = serializers.serialize('json', answers)
+    return render(request, 'learn_language.html',
+                  {'language': language_name,
+                          'json_questions': questions_json, 'questions': questions,
+                   'json_answers': answers_json})
 
 
 def learn_words(request, language):
 
     language_obj = Language.objects.filter(name=language).first()
     all_words = language_obj.word_set.order_by('word_name'.lower())
-    # all_words = Word.objects.filter(language.name == language).order_by('word_name')
-    return render(request, 'words.html', {'all_words': all_words})
+    dict_words = [{'word': word.word_name, 'translate': word.translate} for word in all_words]
+
+    #json_words = serializers.serialize('json', all_words)
+    page = request.GET.get('page')
+    page_obj = paginator.Paginator(all_words, 5)
+    page_obj = page_obj.get_page(page)
+    return render(request, 'words.html', {'page_words': page_obj,
+                                          'json_words': dict_words})
 
 
 def grammar_topics(request, language):

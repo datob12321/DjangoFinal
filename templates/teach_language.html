@@ -6,9 +6,15 @@
     {% for message in messages%}
         <h1>{{ message }}</h1>
     {% endfor %}
-    <h1>Teaching {{ language.name }}</h1>
-    
-    <div class="main-teach">
+
+
+    <div class="main-container">
+         <div class="language-div">
+     <h1>Teaching {{ language.name }}</h1>
+    <img src="{{ language.img_url }}">
+    </div>
+        <div class="main-teach">
+
         <div id="add-word">
             <button id="btn-create">Add new word</button>
         </div>
@@ -18,8 +24,16 @@
         <div id="add-slang">
             <button id="btn-create">Add some expression or slang</button>
         </div>
-    <a href="{% url 'questions_view' language.name %}"><h4>See questions</h4></a>
     </div>
+    
+    </div>
+    <div class="questions">
+    <button type="submit"><a href="{% url 'questions_view' language.name %}">See questions</a></button>
+    </div>
+    
+    
+
+
     
     
     <form method="POST" action="{% url 'add_word' language.name %}" id="word-form">
@@ -67,36 +81,74 @@
     
     
     <style>
+    .main-container{
+        display: flex;
+        flex-direction: column;
+        background-color: #ff8800;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        padding: 15px;
+    }
+
+    .language-div{
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
+
     body{
         font-family: "Franklin Gothic Medium";
     }
     .main-teach{
         display: flex;
-        width: 70%;
+        width: 100%;
         margin: auto;
         justify-content: space-around;
-        background-color: forestgreen;
+        background-color: #8b4722;
         padding: 20px;
+        flex-wrap: wrap;
     }
     
+    
+    
     #btn-create{
-        color: cornflowerblue;
+        font-size: 30px;
+        color: #f1c11c;
         background-color: #343131;
-        border: solid #345431 3px;
-        padding: 10px;
+        border: solid #e1a000 3px;
+        padding: 20px;
+        border-radius: 10px;
     }
     
     #word-form, #grammar-form, #slang-form{
         display: none;
         flex-direction: column;
-        width: 300px;
+        width: 40%;
         height: fit-content;
         margin: auto;
         position: fixed;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        
+        border: 2px solid black;
+        background-color: #703420;
+        color: #1f0a01;
+    }
+    
+    #word-form input[type=text], #grammar-form input[type=text], #grammar-form textarea,
+    #slang-form input[type=text], #slang-form textarea{
+        background-color: #675a56;
+        padding: 10px;
+        color: #1f0a01;
+        border: 2px solid #703420;
+    }
+    
+    #grammar-form select{
+        background-color: #b0a8a5;
+        color: #1f0a01;
+        border: 2px solid #703420;
     }
     
     .buttons{
@@ -111,6 +163,146 @@
     #grammar-form{
         width: 30%;
     }
+    
+    .questions{
+        width: 40%;
+        font-size: 50px;
+        margin: auto;
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .questions button{
+        border: solid black 3px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #802708;
+    }
+    
+    .questions a{
+        text-decoration: none;
+        color: #ecc018;
+        font-weight: bold;
+        font-family: "Franklin Gothic Demi";
+    }
+    
+    @media screen and (max-width: 1025px) {
+        #word-form, #grammar-form, #slang-form{
+        width: 70%;
+       
+    }
+    }
+   
+    @media screen and (max-width: 945px ){
+        #add-word{
+            width: 49%;
+        }
+        #add-grammar{
+            width: 49%;
+        }
+        
+        #add-word button{
+            width: 100%;
+        }
+        #add-grammar button{
+            width: 100%;
+        }
+        
+        #add-slang{
+            margin-top: 10px;
+            width: 100%;
+        }
+        #add-slang button{
+            width: 100%;
+        }
+        
+        .main-teach{
+            justify-content: space-between;
+        }
+        
+        .questions{
+            width: 100%
+        }
+        
+        .questions button{
+            width: 90%;
+        }
+    }
+    
+    @media screen and (max-width: 900px ) {
+    .language-div{
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .language-div h1{
+            font-size: 50px;
+        }
+        
+        
+    }
+    
+    @media screen and (max-width: 650px){
+         #add-word{
+            width: 100%;
+        }
+        #add-grammar{
+            width: 100%;
+        }
+     
+        
+        #add-slang, #add-grammar{
+            margin-top: 10px;
+            width: 100%;
+        }
+        #add-slang button, #add-grammar button, #add-word button{
+            font-size: 20px;
+        }
+        
+        
+    }
+    
+    @media screen and (max-width: 627px) {
+         .language-div h1{
+            font-size: 40px;
+        }
+
+         .language-div img{
+             display: none;
+         }
+         
+         
+         
+          .language-div{
+            justify-content: center;
+        }
+
+        
+    }
+    @media screen and (max-width: 400px) {
+        .questions button {
+            font-size: 20px;
+        }
+    }
+     @media screen and (max-width: 400px){
+        .language-div h1{
+            font-size: 30px;
+        }
+    }
+    
+    @media screen and (max-width: 400px){
+       .language_div h1{
+            font-size: 20px;
+        }
+    }
+    
+    @media screen and (max-width: 380px){
+        #add-slang button, #add-grammar button, #add-word button{
+            font-size: 15px;
+        }
+    }
+
     </style>
     
     <script>
