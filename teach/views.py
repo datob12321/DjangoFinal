@@ -31,12 +31,16 @@ def teach_language(request, language):
 @login_required
 def add_word(request, language):
     if request.method == 'POST':
-        word = request.POST['word']
+        word = request.POST['word'].lower()
         translate = request.POST['translate']
         language = Language.objects.filter(name=language).first()
         user = request.user
-        language.word_set.create(word_name=word, translate=translate, creator=user)
-        messages.success(request, f"New word \"{word}\" added successfully!")
+        if user.is_superuser:
+            language.word_set.create(word_name=word, translate=translate, creator=user, is_valid=True)
+            messages.success(request, f"New word \"{word}\" added successfully!")
+        else:
+            language.word_set.create(word_name=word, translate=translate, creator=user)
+            messages.success(request, f"Your word \"{word}\" will be reviewed!")
         return redirect(reverse('teach_language', args=[language.name]))
     else:
         return render(request, 'teach.html')

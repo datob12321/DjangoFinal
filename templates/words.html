@@ -4,19 +4,30 @@
 
 {% block content %}
     
-    <input type="text" id="search-bar" onkeyup="search_func()">
+
+    <div class="main_container">
+    <div class="search_div">
+        <h1>Search words:</h1>
+        <input type="text" id="search-bar" onkeyup="search_func()" placeholder="search words:">
+    </div>
     <div id="dictionary">
         <h1 class="not_found">Not found!</h1>
          {% for word in page_words %}
-             <h2 class="word">{{ word.word_name }} - {{ word.translate }}</h2>
+             <span class="word">{{ word.word_name }} <span class="slash">-</span> <span class="translate">{{ word.translate }}</span></span>
          {% endfor %}
-    
+
         {% for word in json_words %}
-             <h2 class="dict_word">{{ word.word }} - {{ word.translate }}</h2>
+             <span class="dict_word">{{ word.word }} <span class="slash">-</span> <span class="translate">{{ word.translate }}</span></span>
          {% endfor %}
     </div>
+    </div>
+
     
-    <nav aria-label="Page navigation example">
+
+
+    <div class="other_content">
+    <div class="word_paginator">
+        <nav aria-label="Page navigation example">
   <ul class="pagination">
 
       {% if page_words.has_previous %}
@@ -26,11 +37,11 @@
       </a>
     </li>
               <li class="page-item"><a class="page-link" href="?page={{ page_words.previous_page_number }}">{{ page_words.previous_page_number }}</a></li>
-              
+
       {% endif %}
-  
-  
-                <li class="page-item active"><a class="page-link" href="?page={{ page_words.number }}">{{ page_words.number }}</a></li>
+
+
+                <li class="page-item active active-page"><a class="page-link" href="?page={{ page_words.number }}">{{ page_words.number }}</a></li>
       {% if page_words.has_next %}
               <li class="page-item"><a class="page-link" href="?page={{ page_words.next_page_number }}">{{ page_words.next_page_number }}</a></li>
               <li class="page-item">
@@ -41,6 +52,12 @@
       {% endif %}
   </ul>
 </nav>
+    </div>
+    <div class="learn_other">
+        <button><a href="{% url 'grammar_topics' language_obj.name %}">grammar</a></button>
+    <button><a href="{% url 'slangs' language_obj.name %}">Slangs and expressions</a></button>
+    </div>
+    </div>
     
     
     <script>
@@ -92,22 +109,218 @@
     #dictionary{
         display: flex;
         flex-direction: column;
-        background-color: cornflowerblue;
-        width: fit-content;
+        background-color: #afa041;
+        width: 50%;
         padding: 10px;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
+        border-radius: 15px;
+        border: solid #261601 3px;
         gap: 5px;
         margin-left: auto;
         margin-right: 5%;
+        height: 400px;
+        overflow: auto;
+        color: #150202;
+    }
+
+    #dictionary::-webkit-scrollbar{
+        display: none;
+    }
+
+    #search-bar{
+        padding: 7px;
+        border-radius: 5px;
+        border: solid #150d04 2px;
+        background-color: #f17f35;
+        font-size: 20px;
+
+    }
+    #search-bar::placeholder{
+        color: #2c2a22;
     }
     
+     .page-link:hover{
+        background-color: cornflowerblue;
+    }
+     
+     .active-page a{
+         text-decoration: none;
+     }
+
     .dict_word{
         display: none;
     }
-    
+    .word, .dict_word{
+        font-size: 35px;
+        padding: 7px;
+        border-radius: 5px;
+    }
+
+    .dict_word h1{
+        white-space: normal;
+    }
+    .word:hover, .dict_word:hover {
+        background-color: #af7123;
+    }
+
     .not_found{
         display: none;
     }
+
+
+    .slash{
+        color: #040625;
+    }
+
+    .translate{
+        color: #150000;
+        font-weight: bold;
+    }
+
+    .main_container{
+        background-color: #c5850c;
+        display: flex;
+        padding: 15px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    .search_div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: fit-content;
+        align-items: flex-start;
+    }
+
+    .other_content{
+        display: flex;
+        width: 100%;
+        margin: auto;
+        margin-top: 30px;
+        gap: 20px;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .word_paginator{
+        display: flex;
+        flex-direction: row;
+
+    }
+
+    .learn_other{
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        width: 80%;
+        justify-content: center;
+    }
+
+     .learn_other button{
+         background-color: #3d0303;
+         border: solid #bbd3d3 2px;
+         padding-left: 15px;
+         padding-right: 15px;
+         padding-top: 10px;
+         padding-bottom: 10px;
+         border-radius: 5px;
+     }
+
+     .learn_other button:hover{
+         background-color: #6e2206;
+     }
+
+     .learn_other button a{
+         text-decoration: none;
+         font-size: 30px;
+         color: white;
+     }
+     
+     @media screen and (max-width: 1024px) {
+         
+          .main_container{
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 20px;
+          }
+         
+         #dictionary{
+             height: 780px;
+             display: flex;
+             width: 100%;
+             justify-content: flex-start;
+             margin: unset;
+         }
+         
+         .search_div{
+             width: 100%;
+         }
+         #search-bar{
+             width: 100%;
+         }
+     }
+    
+    @media screen and (max-width: 910px) {
+        #dictionary{
+             height: 680px;
+             display: flex;
+             width: 100%;
+             justify-content: flex-start;
+             margin: unset;
+         }
+         
+         .dict_word, .word{
+             font-size: 30px;
+         }
+     }
+    
+    @media screen and (max-width: 780px){
+        
+        .other_content{
+            flex-direction: column-reverse;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .learn_other{
+            display: flex;
+        }
+    }
+    
+    @media screen and (max-width: 550px) {
+        .dict_word, .word{
+             font-size: 25px;
+         }
+        
+        .main_container{
+            width: 100%;
+        }
+        
+        #dictionary {
+            height: 480px;
+        }
+        
+        .learn_other button a{
+            font-size: 20px;
+        }
+    }
+    
+     @media screen and (min-height: 950px) {
+         #dictionary {
+            height: 850px;
+        }
+     }
+    
+     @media screen and (max-height: 640px) {
+         #dictionary {
+            height: 350px;
+        }
+         .learn_other button a{
+            font-size: 15px;
+        }
+     }
+    
+
     </style>
 {% endblock %}

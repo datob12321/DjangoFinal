@@ -12,6 +12,7 @@ class Word(models.Model):
     word_name = models.CharField(max_length=100, null=False, unique=True)
     translate = models.CharField(max_length=100, null=False)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False)
+    is_valid = models.BooleanField(default=False, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
 
@@ -34,6 +35,7 @@ class Grammar(models.Model):
     grammar_topic = models.ForeignKey(GrammarTopic, on_delete=models.CASCADE)
     grammar_text = models.TextField(max_length=120000, null=False, unique=True, validators=[validate_grammar_text])
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False)
+    is_valid = models.BooleanField(default=False, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
 
@@ -42,6 +44,7 @@ class Slang(models.Model):
     translate_text = models.CharField(max_length=200, null=False)
     explanation = models.CharField(max_length=1000, null=False)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False)
+    is_valid = models.BooleanField(default=False, null=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
 

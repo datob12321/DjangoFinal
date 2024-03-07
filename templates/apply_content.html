@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply content{% endblock %}
+
+{% block content %}
+    
+    {% for message in messages %}
+        <h1>{{ message }}</h1>
+    {% endfor %}
+    
+    <button id="words">words</button>
+    <button id="slangs">slangs</button>
+    <button id="grammars">grammar</button>
+    
+    <div class="main_words">
+    {% for word in words %}
+        <div class="word_div">
+        <form method="post" class="apply_word">
+        {% csrf_token %}
+            <h1>{{ word.word_name }} - {{ word.translate }}</h1>
+            <input type="hidden" name="word" value="{{ word.word_name }}">
+            <input class="btn-success btn" type="submit" value="apply" name="apply_word">
+            <input  class="btn-danger btn" type="submit" value="delete" name="delete_word">
+        </form>
+        </div>
+    {% endfor %}
+    
+    {% if not words %}
+        <h1 id="no_words">There are no words to review</h1>
+    {% endif %}
+    </div>
+    
+    <div class="main_slangs">
+    {% for slang in slangs %}
+        <div class="slang_div">
+        <form method="post" class="apply_slang">
+        {% csrf_token %}
+            <h1 class="see_more">{{ slang.slang_text }} - {{ slang.translate_text }}</h1>
+            <input type="hidden" name="slang" value="{{ slang.id }}">
+            <div class="explanation">
+            <h1>{{ slang.explanation }}</h1>
+                <h2 class="close">close</h2>
+            </div>
+            <input class="btn-success btn" type="submit" value="apply" name="apply_slang">
+            <input class="btn-danger btn" type="submit" value="delete" name="delete_slang">
+        </form>
+        
+        </div>
+    {% endfor %}
+    
+    {% if not slangs %}
+        <h1 id="no_slangs">There are no slangs to review</h1>
+    {% endif %}
+    </div>
+    
+     <div class="main_grammars">
+    {% for grammar in grammars %}
+        <div class="grammar_div">
+        <form method="post" class="apply_grammar">
+        {% csrf_token %}
+            <h1 class="see_more_1">{{ grammar.grammar_name }}</h1>
+            <input type="hidden" name="grammar" value="{{ grammar.id }}">
+            <div class="content">
+                <pre>{{ grammar.grammar_text }}</pre>
+                <h2 class="close_1">close</h2>
+            </div>
+            <input class="btn-success btn" type="submit" value="apply" name="apply_grammar">
+            <input class="btn-danger btn" type="submit" value="delete" name="delete_grammar">
+        </form>
+        </div>
+    {% endfor %}
+    
+    {% if not grammars %}
+        <h1 id="no_grammars">There are no grammar to review</h1>
+    {% endif %}
+    </div>
+    
+    <style>
+
+#words, #slangs, #grammars {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#words:hover, #slangs:hover, #grammars:hover {
+    background-color: #0056b3;
+}
+
+/* Content Sections */
+.main_words, .main_slangs, .main_grammars {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Content Items */
+.word_div, .slang_div, .grammar_div {
+    flex: 1 0 calc(33.33% - 20px);
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.explanation, .content{
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .word_div, .slang_div, .grammar_div {
+        flex: 1 0 calc(50% - 20px);
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .word_div, .slang_div, .grammar_div {
+        flex: 1 0 calc(100% - 20px);
+    }
+}
+
+/* No Content Message */
+#no_words, #no_slangs, #no_grammars {
+    display: none;
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}
+
+/* See More and Close Buttons */
+.see_more, .see_more_1, .close, .close_1 {
+    cursor: pointer;
+    color: #007bff;
+    
+}
+
+.see_more:hover, .see_more_1:hover, .close:hover, .close_1:hover {
+    text-decoration: underline;
+}
+
+
+    
+    </style>
+    
+    <script>
+        var words_container = document.querySelector('.main_words')
+        var slangs_container = document.querySelector('.main_slangs')
+        var grammars_container = document.querySelector('.main_grammars')
+        
+        var words = document.querySelectorAll('.apply_word')
+        var slangs = document.querySelectorAll('.apply_slang')
+        var grammars = document.querySelectorAll('.apply_grammar')
+        
+        var see_more = document.querySelectorAll('.see_more')
+        var explanations = document.querySelectorAll('.explanation')
+        var closes = document.querySelectorAll('.close')
+        
+        var see_more_1 = document.querySelectorAll('.see_more_1')
+        var contents = document.querySelectorAll('.content')
+        var closes_1 = document.querySelectorAll('.close_1')
+        
+        var no_words = document.getElementById('no_words')
+        var no_slangs = document.getElementById('no_slangs')
+        var no_grammar = document.getElementById('no_grammars')
+        
+        var word_button = document.getElementById('words')
+        var slang_button = document.getElementById('slangs')
+        var grammar_button = document.getElementById('grammars')
+        
+        word_button.addEventListener('click', function (){
+            words_container.style.display='block'
+            slangs_container.style.display='none'
+            grammars_container.style.display='none'
+            
+            if (no_words){
+                no_words.style.display = 'block'
+            }
+            if (no_slangs){
+                no_slangs.style.display = 'none'
+            }
+            if (no_grammar){
+                no_grammar.style.display = 'none'
+            }
+        })
+        
+        slang_button.addEventListener('click', function (){
+            words_container.style.display='none'
+            slangs_container.style.display='block'
+            grammars_container.style.display='none'
+            
+            if (no_words){
+                no_words.style.display = 'none'
+            }
+            if (no_slangs){
+                no_slangs.style.display = 'block'
+            }
+            if (no_grammar){
+                no_grammar.style.display = 'none'
+            }
+        })
+        
+        grammar_button.addEventListener('click', function (){
+            words_container.style.display='none'
+            slangs_container.style.display='none'
+            grammars_container.style.display='block'
+            
+            if (no_words){
+                no_words.style.display = 'none'
+            }
+            if (no_slangs){
+                no_slangs.style.display = 'none'
+            }
+            if (no_grammar){
+                no_grammar.style.display = 'block'
+            }
+        })
+        
+        
+        for (let i=0; i<see_more.length; i++){
+            (function(index){
+                see_more[index].addEventListener('click', function (){
+                    explanations[index].style.display='block'
+                })
+                
+                closes[index].addEventListener('click', function (){
+                    explanations[index].style.display='none'
+                })
+            })(i)
+        }
+        
+        for (let i=0; i<see_more_1.length; i++){
+            (function(index){
+                see_more_1[index].addEventListener('click', function (){
+                    contents[index].style.display='block'
+                })
+                
+                closes_1[index].addEventListener('click', function (){
+                    contents[index].style.display='none'
+                })
+            })(i)
+        }
+    </script>
+    
+{% endblock %}
+
+
+

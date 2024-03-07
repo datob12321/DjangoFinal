@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
+from teach.models import Word, Slang, Grammar
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -83,6 +85,73 @@ def reset_password(request):
             else:
                 messages.error(request, 'Incorrect password!')
                 return redirect('profile')
+
+
+@login_required
+def apply_content(request):
+    words = Word.objects.filter(is_valid=False).all()
+    grammars = Grammar.objects.filter(is_valid=False).all()
+    slangs = Slang.objects.filter(is_valid=False).all()
+    if request.method == 'POST':
+        if 'apply_word' in request.POST:
+            word = request.POST.get('word')
+            word_obj = Word.objects.get(word_name=word)
+            word_obj.is_valid = True
+            word_obj.save()
+            send_mail('About your word', f'Hello, {word_obj.creator.username}! Your word "{word}" has been applied!',
+                'settings.EMAIL_HOST_USER', [word_obj.creator.email, 'davit.bitsadze.1@btu.edu.ge'],
+                      fail_silently=False
+            )
+            return redirect('apply_content')
+        elif 'delete_word' in request.POST:
+            word = request.POST.get('word')
+            try:
+                word_obj = Word.objects.get(word_name=word)
+                word_obj.delete()
+                send_mail('About your word', f'Hello, {word_obj.creator.username}! Unfortunately, '
+                                             f'your word \"{word}\" has been rejected!',
+                          'settings.EMAIL_HOST_USER', [word_obj.creator.email],
+                          fail_silently=False
+                          )
+            except Exception as e:
+                messages.error(request, e)
+                return redirect('apply_content')
+        elif 'apply_slang' in request.POST:
+            slang_id = request.POST.get('slang')
+            slang_obj = Slang.objects.get(id=slang_id)
+            slang_obj.is_valid = True
+            slang_obj.save()
+        elif 'delete_slang' in request.POST:
+            slang_id = request.POST.get('slang')
+            try:
+                slang_obj = Slang.objects.get(id=slang_id)
+                slang_obj.delete()
+            except Exception as e:
+                messages.error(request, e)
+                return redirect('apply_content')
+        elif 'apply_grammar' in request.POST:
+            grammar_id = request.POST.get('grammar')
+            grammar_obj = Grammar.objects.get(id=grammar_id)
+            grammar_obj.is_valid = True
+            grammar_obj.save()
+        elif 'delete_grammar' in request.POST:
+            grammar_id = request.POST.get('grammar')
+            try:
+                grammar_obj = Grammar.objects.get(id=grammar_id)
+                grammar_obj.delete()
+            except Exception as e:
+                messages.error(request, e)
+                return redirect('apply_content')
+
+
+
+
+    if request.user.is_superuser:
+        return render(request, 'apply_content.html', {'words': words,
+                                                      'grammars': grammars, 'slangs': slangs})
+    else:
+        messages.error(request, 'You do not have permission to apply content!')
+        return redirect('index')
 
 
 

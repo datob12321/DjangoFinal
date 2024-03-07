@@ -31,15 +31,16 @@ def learn_language(request, language):
 def learn_words(request, language):
 
     language_obj = Language.objects.filter(name=language).first()
-    all_words = language_obj.word_set.order_by('word_name'.lower())
+    all_words = language_obj.word_set.filter(is_valid=True).order_by('word_name'.lower())
+    # order_by('word_name'.lower())
     dict_words = [{'word': word.word_name, 'translate': word.translate} for word in all_words]
 
     #json_words = serializers.serialize('json', all_words)
     page = request.GET.get('page')
-    page_obj = paginator.Paginator(all_words, 5)
+    page_obj = paginator.Paginator(all_words, 10)
     page_obj = page_obj.get_page(page)
     return render(request, 'words.html', {'page_words': page_obj,
-                                          'json_words': dict_words})
+                                          'json_words': dict_words, 'language_obj': language_obj})
 
 
 def grammar_topics(request, language):
@@ -52,7 +53,7 @@ def grammar_topics(request, language):
 def grammar_lessons(request, language, topic):
     topic_obj = GrammarTopic.objects.filter(topic=topic).first()
     language_obj = Language.objects.filter(name=language).first()
-    lessons = language_obj.grammar_set.filter(grammar_topic=topic_obj)
+    lessons = language_obj.grammar_set.filter(grammar_topic=topic_obj, is_valid=True)
     lessons_json = serializers.serialize('json', lessons)
     return render(request, 'grammar_lessons.html', {"lessons": lessons,
                                                     "topic": topic_obj, "lessons_json": lessons_json})
@@ -60,7 +61,7 @@ def grammar_lessons(request, language, topic):
 
 def slangs_lessons(request, language):
     language_obj = Language.objects.filter(name=language).first()
-    slangs = language_obj.slang_set.all()
+    slangs = language_obj.slang_set.filter(is_valid=True).all()
     return render(request, 'slangs.html', {'slangs': slangs})
 
 
