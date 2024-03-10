@@ -64,7 +64,12 @@ def logout_user(request):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    words = len(request.user.word_set.all())
+    slangs = len(request.user.slang_set.all())
+    grammars = len(request.user.grammar_set.all())
+    answers = len(request.user.answer_set.all())
+    return render(request, 'profile.html', {'words_len': words, 'slangs_len':
+        slangs, 'grammars_len': grammars, 'answers_len': answers})
 
 
 def reset_password(request):
@@ -85,6 +90,22 @@ def reset_password(request):
             else:
                 messages.error(request, 'Incorrect password!')
                 return redirect('profile')
+
+
+def fullname(request):
+    if request.method == 'POST':
+        if 'submit_firstname' in request.POST:
+            first_name = request.POST['firstname']
+            request.user.first_name = first_name
+            request.user.save()
+            messages.success(request, 'Your firstname has been changed successfully!')
+            return redirect('profile')
+        elif 'submit_lastname' in request.POST:
+            last_name = request.POST['lastname']
+            request.user.last_name = last_name
+            request.user.save()
+            messages.success(request, 'Your lastname has been changed successfully!')
+            return redirect('profile')
 
 
 @login_required
@@ -108,7 +129,7 @@ def apply_content(request):
             try:
                 word_obj = Word.objects.get(word_name=word)
                 word_obj.delete()
-                send_mail('About your word', f'Hello, {word_obj.creator.username}! Unfortunately, '
+                send_mail('About your added word', f'Hello, {word_obj.creator.username}! Unfortunately, '
                                              f'your word \"{word}\" has been rejected!',
                           'settings.EMAIL_HOST_USER', [word_obj.creator.email],
                           fail_silently=False
@@ -121,11 +142,19 @@ def apply_content(request):
             slang_obj = Slang.objects.get(id=slang_id)
             slang_obj.is_valid = True
             slang_obj.save()
+            send_mail('About your added slang-expression', f'Hello, {slang_obj.creator.username}!'
+                                    f'your slang-expression \"{slang_obj.slang_text}\" has been applied!',
+                      'settings.EMAIL_HOST_USER', [slang_obj.creator.email],
+                      fail_silently=False)
         elif 'delete_slang' in request.POST:
             slang_id = request.POST.get('slang')
             try:
                 slang_obj = Slang.objects.get(id=slang_id)
                 slang_obj.delete()
+                send_mail('About your added slang-expression', f'Hello, {slang_obj.creator.username}!'
+                                                 f'Unfortunately, your slang-expression \"{slang_obj.slang_text}\" has been rejected!',
+                          'settings.EMAIL_HOST_USER', [slang_obj.creator.email],
+                          fail_silently=False)
             except Exception as e:
                 messages.error(request, e)
                 return redirect('apply_content')
@@ -134,16 +163,22 @@ def apply_content(request):
             grammar_obj = Grammar.objects.get(id=grammar_id)
             grammar_obj.is_valid = True
             grammar_obj.save()
+            send_mail('About your added grammar lesson', f'Hello, {grammar_obj.creator.username}!'
+                                                           f'your grammar lesson \"{grammar_obj.grammar_name}\" has been applied!',
+                      'settings.EMAIL_HOST_USER', [grammar_obj.creator.email],
+                      fail_silently=False)
         elif 'delete_grammar' in request.POST:
             grammar_id = request.POST.get('grammar')
             try:
                 grammar_obj = Grammar.objects.get(id=grammar_id)
                 grammar_obj.delete()
+                send_mail('About your added grammar lesson', f'Hello, {grammar_obj.creator.username}!'
+                                                             f'Unfortunately, your grammar lesson \"{grammar_obj.grammar_name}\" has been rejected!',
+                          'settings.EMAIL_HOST_USER', [grammar_obj.creator.email],
+                          fail_silently=False)
             except Exception as e:
                 messages.error(request, e)
                 return redirect('apply_content')
-
-
 
 
     if request.user.is_superuser:

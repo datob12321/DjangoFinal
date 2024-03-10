@@ -89,11 +89,10 @@ def questions_view(request, language):
     answer_form = AnswerForm()
     language = Language.objects.filter(name=language).first()
     questions = Question.objects.filter(language=language)
-    paginate = paginator.Paginator(questions, 2)
+    paginate = paginator.Paginator(questions, 4)
     page = request.GET.get('page')
     page_obj = paginate.get_page(page)
     return render(request, 'questions.html', {'questions': page_obj,
-                                              'range': range(2), "questions_length": range(3),
                                               "answer_form": answer_form})
 
 

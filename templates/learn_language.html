@@ -77,41 +77,94 @@
                     var answer1 = `<div class="answer">
                         <h1>${specific_answers[j].fields.answer_text}</h1>
                         </div>`
-                {#console.log(specific_answers[j].fields.answer_text+' - '+questions_json[i].pk)#}
                 answers_div[i].innerHTML += answer1
+
             }
+            answers_div[i].innerHTML += `<div class="close_answers">
+            <button>close</button>
+        </div>`
+
+            var show_answers = document.querySelectorAll('.show_answers')
+            var answers_div1 = document.querySelectorAll('.answers_div')
+            var close_answers = document.querySelectorAll('.close_answers')
+            for (let ind=0; ind<show_answers.length; ind++){
+                (function(index){
+                    show_answers[index].addEventListener('click', function(){
+                answers_div1[index].style.display='flex'
+
+            })
+
+                    close_answers[index].addEventListener('click', function(){
+                answers_div1[index].style.display='none'
+
+            })
+                })(ind)
+
+    }
         }
-    })
+    });
     
  
-    var show_answers = document.querySelectorAll('.show_answers')
-    for (var i=0; i<show_answers.length; i++){
-        (function(index){
-            show_answers[i].addEventListener('click', function(){
-                answers_div[index].style.display='block'
-                console.log('sdfsd')
-            })
-        })(i) 
-    }
+
+
     
     my_questions.addEventListener('click', function (){
         questions_div.innerHTML=''
         questions_div.style.display='flex'
-        for (var i=0; i< questions_json.length; i++){
+        for (var i=0, n=0; i< questions_json.length; i++){
             if (questions_json[i].fields.user == currentUser){
                 var specific_answers = answers_json.filter((obj)=>obj.fields.address==questions_json[i].pk)
-                questions_div.innerHTML+=`<div class="question_div">
+                var questions=`<div class="question_div">
         <p>${questions_json[i].fields.pub_date}</p>
         <div class="question_answer">
             <h2>${questions_json[i].fields.question_text}</h2>
-             <button><p>answers: ${specific_answers.length}</p></button>
+            <button class="show_answers"><p>answers: ${specific_answers.length}</p></button>
+
         </div>
-        
+        <div class="answers_div">
+
+        </div>
+
         </div>`
+            questions_div.innerHTML+=questions
                 {#console.log(questions_json[i].pk)#}
+                             var answers_div = document.querySelectorAll('.answers_div')
+
+            for (var j=0; j<specific_answers.length; j++){
+                    var answer1 = `<div class="answer">
+                        <h1>${specific_answers[j].fields.answer_text}</h1>
+                        </div>`
+                answers_div[i].innerHTML += answer1
 
             }
+               
+                    console.log(answers_div[n])
+                 answers_div[n].innerHTML += `<div class="close_answers">
+            <button>close</button>
+        </div>`
+               n++
+           
+
+            var show_answers = document.querySelectorAll('.show_answers')
+            var answers_div1 = document.querySelectorAll('.answers_div')
+            var close_answers = document.querySelectorAll('.close_answers')
+            for (let ind=0; ind<show_answers.length; ind++){
+                (function(index){
+                    show_answers[index].addEventListener('click', function(){
+                answers_div1[index].style.display='flex'
+
+            })
+
+                    close_answers[index].addEventListener('click', function() {
+                        answers_div1[index].style.display = 'none'
+                    })
             
+                
+                })(ind)
+
+    }
+            }
+
         }
     })
     
@@ -127,7 +180,7 @@
         align-items: center;
         gap: 30px;
         justify-content: flex-start;
-        color: yellow;
+        color: #491302;
         padding-left: 15px;
         padding-right: 15px;
     }
@@ -138,7 +191,7 @@
         display: flex;
         gap: 70px;
         flex-direction: column;
-        background-color: #101052;
+        background-color: #f8b436;
         color: aquamarine;
         padding: 15px;
         border-radius: 50px;
@@ -162,9 +215,9 @@
         color: floralwhite;
     }
     .content-list li{
-        background-color: #af1f06;
+        background-color: #851907;
         padding: 10px;
-        border: solid #f1e4bd 2px;
+        border: solid #e07c3e 2px;
         border-radius: 25px;
     }
 
@@ -177,12 +230,12 @@
         margin: auto;
         display: flex;
         gap: 20px;
-        background-color: darkgoldenrod;
+        background-color: #8c450d;
         justify-content: space-around;
         padding: 15px;
         margin-top: 30px;
         border-width: 4px;
-        border: solid #020249;
+        border: solid #cff1f1;
         border-radius: 100px;
 
     }
@@ -194,7 +247,7 @@
         border-radius: 30px;
         font-family: "Franklin Gothic Book";
         font-weight: bolder;
-        background-color: #1d1d57;
+        background-color: #860202;
         font-size: 15px;
         color: #bcd7d7;
 
@@ -229,6 +282,7 @@
     margin-top: 40px;
     padding: 15px;
     gap: 10px;
+    border-radius: 10px;
 
 }
 
@@ -257,15 +311,17 @@
     .question_div{
         display: flex;
         flex-direction: column;
-        background-color: forestgreen;
+        background-color: #f3f871;
         padding: 5px;
         border-radius: 10px;
+        gap: 10px
     }
     
     .question_div button p{
         text-decoration: none;
-        color: cornflowerblue;
+        color: #020213;
         font-size: 20px;
+        font-weight: 600;
     }
     
     .question_div button{
@@ -282,7 +338,22 @@
     }
     
     .answers_div{
-        display: none
+        display: none;
+        background-color: #ffda7b;
+        border-radius: 10px;
+        padding: 5px;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .answer{
+        border: solid #ded7d7 3px;
+        border-radius: 8px;
+        background-color: #9d3f04;
+        padding: 5px;
+        color: beige;
+        white-space: normal;
+        word-break: break-word;
     }
     </style>
     <script>
@@ -358,6 +429,23 @@
             font-size: 25px;
             border-radius: 50px;
         }
+    }
+
+    .close_answers button{
+        padding: 5px;
+        color: #2f0804;
+        font-weight: 600;
+        font-size: 20px;
+        border-radius: 5px;
+        border: solid #8b7800 2px;
+        background-color: #cc7d3c;
+    }
+    .close_answers button:hover{
+        background: none;
+    }
+    
+    .close_answers{
+        margin-left: auto;
     }
 
     @media screen and (max-width: 730px) {

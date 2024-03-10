@@ -5,7 +5,6 @@
 {% block content %}
     <h1>questions</h1>
     
-    <br>
     {% for message in messages %}
         <h1>{{ message }}</h1>
     {% endfor %}
@@ -80,15 +79,15 @@
 
     <style>
     .main_questions{
-        background-color: darkgoldenrod;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        width: 95%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
+        background-color: #983d04;
+    border-radius: 10px;
+    border: solid gray 2px;
+    padding: 15px;
+    width: 95%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
         gap: 10px;
-        
     }
 
     .main_questions h2{
@@ -139,19 +138,26 @@
     }
 
     .question_container{
-        background-color: darkolivegreen;
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-        flex-wrap: wrap;
-        padding-left: 5px;
-        padding-top: 5px;
-        
-        border-radius: 5px;
+        background-color: #e9f1da;
+    border-radius: 5px;
+    padding: 5px;
+    width: calc(50% - 10px); /* Two containers per row with 10px gap */
+    margin-right: 10px; /* Gap between containers */
+    margin-bottom: 10px; /* Gap between rows */
 
     }
     
-    
+    .question_container:nth-child(odd) {
+    margin-right: 0; /* Reset margin for odd containers to align with the left */
+}
+
+.question_container:nth-last-child(2):nth-child(odd) {
+    margin-right: auto; /* If only one container in the last row, push it to the left */
+}
+
+.question_container:last-child {
+    width: 100%; /* Full width for the last container if it's alone */
+}
     
     .page-link:hover{
         background-color: cornflowerblue;

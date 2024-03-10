@@ -3,13 +3,64 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-    
+
+    <div class="main_container">
+
     {% for message in messages %}
         <h1>{{ message }}</h1>
     {% endfor %}
-        <div class="form-div">
+
+    <div class="user_details">
+        <h2>username: {{ user.username }}</h2>
+        {% if user.first_name %}
+           <h2>firstname: {{ user.first_name }}</h2>
+        {% endif %}
+        {% if user.last_name %}
+            <h2>lastname: {{ user.last_name }}</h2>
+        {% endif %}
+
+    {% if user.email %}
+        <h2>email: {{ user.email }}</h2>
+    {% endif %}
+    
+    <div class="fullname">
+        <div class="update_firstname">
+        <form method="post" action="{% url 'fullname' %}">
+        {% csrf_token %}
+            {% if user.first_name %}
+            <label>Change your firstname</label>
+            {% else %}
+        <label>Create your firstname</label>
+        {% endif %}
+        <div class="update">
+            <input type="text" name="firstname" required {% if user.first_name %}placeholder="change firstname"
+    {% else %} placeholder="create firstname" {% endif %}>
+    <input type="submit" name="submit_firstname">
+            </div>
+          </form>
+        </div>
+    </div>
+    
+
+    <div class="update_lastname">
+        <form method="post" action="{% url 'fullname' %}">
+            {% csrf_token %}
+            {% if user.last_name %}
+            <label>Change your lastname</label>
+            {% else %}
+        <label>Create your lastname</label>
+        {% endif %}
+        <div class="update">
+            <input type="text" name="lastname" required {% if user.last_name %}placeholder="change lastname"
+            {% else %} placeholder="create lastname" {% endif %}>
+            <input type="submit" name="submit_lastname">
+        </div>
+        </form>
+    </div>
+    
+        <div class="form-div update_password">
   <h2>Reset the password:</h2>
-    <form action="{% url 'reset_password' %}" method="POST" class="user-form">
+    <form action="{% url 'reset_password' %}" method="POST" class="user-form1">
         {% csrf_token %}
         <h3>Old password:</h3>
         <input type="text" placeholder="old password" name="old_password" required class="user-input">
@@ -18,10 +69,195 @@
         <h3>Repeat the password:</h3>
         <input type="password" placeholder="new password" name="new_password_2" required class="user-input">
         <div class="button-div">
-          <button type="submit" class="user-button">Reset</button>
+          <button type="submit" class="user-button" name="submit_password">Reset</button>
         </div>
-
     </form>
-   
+
 </div>
+    </div>
+
+    <div class="teaching_info">
+        <h1 style="width: fit-content">Content created by {{ user.username }}</h1>
+        <div class="contents">
+            <div class="words">
+            <h2>words</h2>
+            <h4>{{ words_len }}</h4>
+        </div>
+        <div class="slangs">
+            <h2>Slangs and expressions</h2>
+            <h4>{{ slangs_len }}</h4>
+        </div>
+        <div class="grammars">
+            <h2>grammar lessons</h2>
+            <h4>{{ grammars_len }}</h4>
+        </div>
+            <div class="answers">
+            <h2>answers</h2>
+            <h4>{{ answers_len }}</h4>
+        </div>
+        </div>
+        
+        <div class="status">
+            <h3>teacher status: No</h3>
+            <a href="#">pass the test to get the status</a>
+        </div>
+    </div>
+
+    </div>
+
+    <style>
+    .main_container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+        padding: 10px;
+}
+
+
+.user-form1 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    background-color: #732f29;
+    padding: 20px;
+    color: #ee911b;
+    border-radius: 6px;
+    gap: 10px;
+}
+
+
+.user_details {
+    width: 43%;
+    background-color: #d5d5bb;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+.teaching_info {
+    width: 43%;
+    background-color: #f8eed7;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.user-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ee911b;
+    border-radius: 4px;
+    background-color: #570d04;
+    color: #ee911b;
+}
+
+
+.user-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ee911b;
+    color: #570d04;
+    cursor: pointer;
+}
+
+.user-button:hover {
+    background-color: #ffaa55;
+}
+
+/* Links */
+.teaching_info a {
+    color: #570d04;
+    text-decoration: none;
+}
+
+.teaching_info a:hover {
+    text-decoration: underline;
+}
+
+
+
+.words, .slangs, .grammars, .answers{
+    background-color: #c5b144;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.contents{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status h3{
+    font-size: 45px;
+}
+
+@media screen and (max-width: 576px) {
+    .main_container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user_details,
+    .teaching_info {
+        width: 100%;
+    }
+
+    .teaching_info {
+        margin-top: 20px;
+    }
+
+    .user-form1 {
+        padding: 15px;
+    }
+
+    .status h3 {
+        font-size: 30px;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .main_container {
+        justify-content: space-between;
+    }
+
+    .user_details,
+    .teaching_info {
+        width: 48%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .user-form1 {
+        max-width: 400px;
+        padding: 20px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .main_container {
+        justify-content: space-around;
+    }
+
+    .user_details,
+    .teaching_info {
+        width: 45%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .user_details,
+    .teaching_info {
+        width: 40%;
+    }
+}
+
+    </style>
+
 {% endblock %}
