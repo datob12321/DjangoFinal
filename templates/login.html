@@ -8,7 +8,7 @@
     {% endfor %}
     <br>
     <div class="form-div">
-  <h2>Login below:</h2>
+  <h2 class="login_below">Login below:</h2>
     <form action="{% url 'login' %}" method="POST" class="user-form">
         {% csrf_token %}
         <h3>Username:</h3>
@@ -20,8 +20,15 @@
         </div>
 
     </form>
-    <a href="{% url 'register' %}" id="form-link">Sign up</a>
-    <a href="{% url 'password_reset' %}" id="form-link">Did you forget your password?</a>
+    <a class="link" href="{% url 'register' %}" id="form-link">Sign up</a>
+    <a class="link" href="{% url 'password_reset' %}" id="form-link">Did you forget your password?</a>
     
 </div>
+    <style>
+    .login_below{
+        color: #ee940c;
+    }
+    
+   
+    </style>
 {% endblock %}

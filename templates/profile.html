@@ -97,10 +97,12 @@
         </div>
         </div>
         
-        <div class="status">
-            <h3>teacher status: No</h3>
-            <a href="#">pass the test to get the status</a>
+        {% if user.is_superuser %}
+            <div class="status">
+            <a href="{% url 'apply_content' %}"><h3>Check content sent by teachers</h3></a>
         </div>
+        {% endif %}
+        
     </div>
 
     </div>

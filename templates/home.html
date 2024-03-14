@@ -3,45 +3,118 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="container">
     {% for message in messages %}
+    <div class="message">
         <h1>{{ message }}</h1>
+    </div>
     {% endfor %}
     <br>
-    
-    {% if user.is_authenticated %}
-        <span>Welcome {{ user.username }}</span>
+
+    <div class="welcome">
+        {% if user.is_authenticated %}
+        <span>Welcome, {{ user.username }}</span>
         {% else %}
         <span>Welcome</span>
-    {% endif %}
-    
-    <div class="main-home">
-    <div class="main-left">
-        <div class="above">
-            <div class="img-container-l">
-            <img src="https://media.cnn.com/api/v1/images/stellar/prod/underscored-best-language-learning-apps-lead-image3.jpeg?q=h_900,w_1600,x_0,y_0" alt="could not load">    
-            <h1><a href="{% url 'learn'%}">Learn</a></h1>
-            </div>
-            
-        </div>
-        <div class="down">
-            <div class="img-container-t">
-            <img src="https://img.freepik.com/free-photo/medium-shot-woman-teaching-lesson_23-2149272233.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1708300800&semt=sph">
-                <h1><a href="{% url 'teach'%}">Teach</a></h1>
-                </div>
-        </div>
+        {% endif %}
     </div>
-    <div class="main-right">
-        <div class="above">
-            <span>If you want to start learning a new language You have entered at a correct address! 
-                You can choose the language you want to learn and our teachers will help you to easily 
-                pick up some basic words and gramma rules, discover native expressions. Do you have a 
-                wish to learn more than one language? Don't worry! The great thing is that You can 
-                choose several language at the same time. Wait, wait! Are you a teacher? We have some 
-                work for you, too. If you want to cooperate with us visit the link below!</span>
 
+    <div class="main-home">
+        <div class="main-left">
+            <div class="above">
+                <img src="https://media.cnn.com/api/v1/images/stellar/prod/underscored-best-language-learning-apps-lead-image3.jpeg?q=h_900,w_1600,x_0,y_0" alt="could not load">
+                <h1><a href="{% url 'learn'%}">Learn</a></h1>
+            </div>
+            <div class="down">
+                <img src="https://img.freepik.com/free-photo/medium-shot-woman-teaching-lesson_23-2149272233.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1708300800&semt=sph">
+                <h1><a href="{% url 'teach'%}">Teach</a></h1>
+            </div>
         </div>
-        <div class="down"></div>
+
     </div>
-    </div>
-    
-{% endblock%}
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0; 
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff; 
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .message h1 {
+        font-size: 24px;
+        color: #333333;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .welcome span {
+        display: block;
+        font-size: 18px;
+        color: #333333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .main-home {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .main-left,
+    .main-right {
+        display: flex;
+        flex-direction: column;
+        width: calc(50% - 10px);
+    }
+
+    .main-left .above,
+    .main-left .down,
+    .main-right .above {
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #fff; 
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    }
+
+    .main-left .down,
+    .main-right .above {
+        margin-top: 20px;
+    }
+
+    .main-left img,
+    .main-right img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .main-left h1,
+    .main-right span {
+        font-size: 20px;
+        color: #050541; 
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .main-left h1 a {
+        color: #050541; 
+        text-decoration: none;
+    }
+
+    .main-left h1 a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

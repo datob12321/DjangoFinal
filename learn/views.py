@@ -62,7 +62,10 @@ def grammar_lessons(request, language, topic):
 def slangs_lessons(request, language):
     language_obj = Language.objects.filter(name=language).first()
     slangs = language_obj.slang_set.filter(is_valid=True).all()
-    return render(request, 'slangs.html', {'slangs': slangs})
+    page = request.GET.get('page')
+    page_obj = paginator.Paginator(slangs, 2)
+    page_obj = page_obj.get_page(page)
+    return render(request, 'slangs.html', {'slangs': page_obj})
 
 
 def make_question(request, language):

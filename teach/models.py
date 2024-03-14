@@ -60,3 +60,19 @@ class Answer(models.Model):
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=False)
     date = models.DateTimeField(default=datetime.now, blank=True)
 
+
+class Status(models.Model):
+    teacher_status = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+
+
+class Test(models.Model):
+    question = models.CharField(max_length=1000)
+    a = models.CharField(max_length=500)
+    b = models.CharField(max_length=500)
+    c = models.CharField(max_length=500)
+    d = models.CharField(max_length=500)
+    correct_answer = models.CharField(max_length=1, choices=[('a', 'a'), ('b', 'b'), ('c', 'c'), ('d', 'd')], null=False)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+

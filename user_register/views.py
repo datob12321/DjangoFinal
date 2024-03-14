@@ -6,6 +6,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from teach.models import Word, Slang, Grammar
 from django.core.mail import send_mail
+from teach.models import Status
+from languages.models import Language
 
 # Create your views here.
 
@@ -20,7 +22,6 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
         password2 = request.POST['password2']
-        profile_img = request.POST['profile_img']
         if password != password2:
             messages.error(request, 'Passwords do not match!')
             return redirect('register')
@@ -34,6 +35,10 @@ def register(request):
             else:
                 new_user = User.objects.create_user(username=username, email=email, password=password)
                 new_user.save()
+                languages = Language.objects.all()
+                for i in range(len(languages)):
+                    status = Status.objects.create(user=new_user, language=languages[i])
+                    status.save()
                 login(request, new_user)
                 messages.success(request, f'User {username} is  created successfully!')
                 return redirect('index')

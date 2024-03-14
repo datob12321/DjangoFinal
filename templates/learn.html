@@ -4,15 +4,87 @@
 
 
 {% block content %}
-    <div class="main-languages">
-    <h1>Choose a language to learn: </h1>
-    <div class="languages-container">
-    {% for language in languages %}
-        <div class="language">
-            <a href="{% url 'learn_language' language.name %}"><img class="icons" src="{{ language.img_url }}"></a>
-        <a href="{% url 'learn_language' language.name %}"><h1>{{ language.name }}</h1></a>
+<div class="main-container">
+        <div class="main-languages">
+            <h1 style="color: wheat">Choose a language to learn:</h1>
+            <div class="languages-container">
+                {% for language in languages %}
+                    <div class="language-card">
+                        <a href="{% url 'learn_language' language.name %}">
+                            <img class="language-icon" src="{{ language.img_url }}" alt="{{ language.name }}">
+                        </a>
+                        <a class="language_name" href="{% url 'learn_language' language.name %}">
+                            <h2>{{ language.name }}</h2>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    {% endfor %}
     </div>
-    </div>
+    
+    <style>
+    .main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-languages {
+    text-align: center;
+}
+
+.languages-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.language-card {
+    width: 250px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.language-icon {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.language-card h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+
+@media (max-width: 768px) {
+    .language-card {
+        width: calc(50% - 20px);
+    }
+}
+    
+    
+@media (min-width: 800px) and (min-height: 1000px) {
+    .language-card {
+        width: calc(60% - 20px);
+    }
+
+    .language-icon {
+        width: 150px;
+        height: 150px;
+        display: block;
+        margin: 0 auto 10px;
+    }
+
+    .language_name h2 {
+        font-size: 30px;
+    }
+}
+    </style>
 {% endblock %}

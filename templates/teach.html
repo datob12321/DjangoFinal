@@ -2,23 +2,194 @@
 
 {% block title %}Teach{% endblock %}
 
-
 {% block content %}
-    <div class="main-languages">
-    <h1>Choose a language to teach: </h1>
-    <div class="languages-container">
-    {% for language in languages %}
-        <div class="language">
-            <a href="{% url 'teach_language' language.name %}"><img class="icons" src="{{ language.img_url }}"></a>
-        <a href="{% url 'teach_language' language.name %}"><h1>{{ language.name }}</h1></a>
-        </div>
+    {% for message in messages%}
+        <h1>{{ message }}</h1>
     {% endfor %}
+
+    <div class="main-container">
+        <div class="main-languages">
+            <h1 style="color: wheat">Choose a language to teach:</h1>
+            <div class="languages-container">
+                {% for status in statuses %}
+                    
+                    <div class="language-card">
+                    {% if status.teacher_status %}
+                        <a href="{% url 'teach_language' status.language.name %}">
+                            <img class="language-icon" src="{{ status.language.img_url }}" alt="{{ status.language.name }}">
+                        </a>
+                        <a class="language_name" href="{% url 'teach_language' status.language.name %}">
+                            <h2>{{ status.language.name }}</h2>
+                        </a>
+
+                        {% else %}
+                         <a>
+                            <img class="language-icon" src="{{ status.language.img_url }}" alt="{{ status.language.name }}">
+                        </a>
+                        <a class="language_name">
+                            <h2>{{ status.language.name }}</h2>
+                        </a>
+                    {% endif %}
+
+                    </div>
+                    {% if not status.teacher_status %}
+                        
+                        <div class="get_test" status="no">
+        <div class="question-test">
+            <p>You have not a teacher status in {{ status.language.name }}!</p>
+        </div>
+    <div class="link_test">
+        <div class="link_div">
+            <a href="{% url 'teacher_test' status.language.name %}">Do a test to get the status</a>
+        </div>
+        <div class="close">
+            <button>close</button>
+        </div>
     </div>
     </div>
+                        {% else %}
+                        <div class="get_test" status="yes"></div>
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    
+    <style>
+    
+    .get_test {
+        display: none;
+        flex-direction: column;
+    width: 400px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        gap: 10px;
+        transform: translate(-50%, -50%);
+        border: solid #2d0202 2px;
+}
+    
+    .get_test p{
+        font-size: 28px;
+    }
+    
+    .get_test a{
+        font-size: 20px;
+    }
+
+.link_test {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.link_div {
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.close {
+    display: inline-block;
+}  
+    
+    .main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-languages {
+    text-align: center;
+}
+
+.languages-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.language-card {
+    width: 250px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.language-card:hover{
+    cursor: pointer;
+}
+
+.language-icon {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.language-card h2 {
+    font-size: 18px;
+    margin: 0;
+}
 
 
+@media (max-width: 768px) {
+    .language-card {
+        width: calc(50% - 20px);
+    }
+}
+    
+    
+@media (min-width: 800px) and (min-height: 1000px) {
+    .language-card {
+        width: calc(60% - 20px);
+    }
+    
+    .language-icon {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: 0 auto 10px;
+}
+    
+    .language_name h2{
+        font-size: 30px;
+    }
+}    
 
-
-
+    </style>
+    
+    <script>
+    var question_windows = document.querySelectorAll('.get_test')
+    var languages = document.querySelectorAll('.language-card')
+    var closes = document.querySelectorAll('.close')
+    for (let i=0, j=0; i<question_windows.length; i++){
+        if (question_windows[i].getAttribute('status')=='no'){
+              languages[i].addEventListener('click', function (){
+                  question_windows[i].style.display='flex'
+        })  
+            
+             closes[j].addEventListener('click', function (){
+            question_windows[i].style.display='none'
+        })
+            j++
+            }
+        
+        
+        
+    }
+    
+    </script>
 {% endblock %}
 

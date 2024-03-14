@@ -2,46 +2,132 @@
 {% block title %}Slangs{% endblock %}
 
 {% block content %}
-    <h1>Slangs and expressions</h1>
-    <br>
+    <div class="main_div">
+    <div class="content-name">
+        <h1 id="slangs">Slangs and expressions</h1>
+    </div>
+
     <div class="main-slangs">
-    {% for slang in slangs %}
+        {% for slang in slangs %}
         <div id="slang-container">
-        
-        <div id="slang-info">
-            <div id="close-div">
-                <h1>{{ slang.slang_text }}</h1>
-                <button id="close"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+
+            <div id="slang-info">
+                <div>
+                    <div id="close-div">
+                        <h1>{{ slang.slang_text }}</h1>
+                        <button id="close"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                    </div>
+
+                    <h1>{{ slang.translate_text }}</h1>
+                </div>
+
+                <p>{{ slang.explanation }}</p>
             </div>
-            
-        <h1>{{ slang.translate_text }}</h1>
-        <p>{{ slang.explanation }}</p>
-        </div>
-        
-        <div id="slang">
-            <a href="#"><h1>{{ slang.slang_text }}</h1></a>
-        </div>
-        
+
+            <div id="slang">
+                <a href="#"><h1>{{ slang.slang_text }}</h1></a>
+            </div>
+
         </div>
         {% endfor %}
     </div>
-    
-    
-   
-    
+
+</div>
+
+<div class="slang_paginator">
+    <div class="pagination-container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+
+                {% if slangs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="?page={{ slangs.previous_page_number }}">{{ slangs.previous_page_number }}</a></li>
+
+                {% endif %}
+
+                <li class="page-item active active-page"><a class="page-link" href="?page={{ slangs.number }}">{{ slangs.number }}</a></li>
+                {% if slangs.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ slangs.next_page_number }}">{{ slangs.next_page_number }}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ slangs.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
         <style>
         
-        .main-slangs{
+        .pagination-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .page-item {
+        margin: 0 5px;
+    }
+
+    @media only screen and (max-width: 430px) {
+        .pagination-container {
+            margin-top: 10px;
+        }
+
+        .page-link {
+            padding: 5px 10px;
+        }
+    }
+
+        .main_div{
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            width: 95%;
+            margin: auto;
+            padding: 10px;
+            gap: 40px;
+            align-items: center;
         }
         
+        .main-slangs{
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            padding: 15px;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #b87b0b;
+            border-radius: 10px;
+        }
+        #slang-container a{
+            color: #491601;
+            font-weight: bolder;
+            font-family: "Franklin Gothic Demi Cond";
+
+        }
         
         #slang-container{
-            
-            width: 500px;
+            width: 100%;
+            padding: 10px;
+            background-color: #a4998f;
+            border-radius: 15px;
             {#word-break: break-word;#}
+        }
+        
+        .content-name{
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        #slang-container:hover{
+            box-shadow: 0 5px 10px rgba(65, 5, 6, 0.32);
         }
         
         #slang-container a{
@@ -49,15 +135,18 @@
         }
         
         #slang-info{
-            background-color: darkgoldenrod;
             display: none;
             flex-direction: column;
+            gap: 30px;
             {#position: fixed;#}
             
         }
         
+        #slang-info p{
+            color: #884603;
+        }
+        
         #slang{
-            background-color: darkolivegreen;
             {#position: fixed;#}
         }
         
@@ -65,6 +154,58 @@
             display: flex;
             justify-content: space-between;
         }
+
+        #slangs{
+            color: wheat;
+        }
+        
+        @media only screen and (min-width: 300px) {
+    .main_div {
+        width: 90%;
+        padding: 20px;
+    }
+    .main-slangs {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 20px;
+    }
+}
+
+      @media only screen and (max-width: 430px) {
+
+          .main-slangs {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+          
+          #slang-container h1{
+              font-size: 25px;
+          }
+          
+          .main-slangs{
+              padding: 5px;
+          }
+}  
+        
+
+@media only screen and (min-width: 768px) {
+    .main_div {
+        width: 80%;
+        padding: 30px;
+    }
+}
+
+
+@media only screen and (min-width: 992px) {
+    .main_div {
+        width: 70%;
+        padding: 40px;
+    }
+    .main-slangs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+
         </style>
         
     

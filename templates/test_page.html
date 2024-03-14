@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Teacher Test{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Test of {{ language.name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% for question in questions %}
+        <div class="question">
+            <h2>{{ forloop.counter }}. {{ question.question }}</h2>
+            <div class="options">
+                <label>
+                    <input type="radio" name="answer{{ forloop.counter0 }}" value="a">
+                    {{ question.a }}
+                </label>
+                <label>
+                    <input type="radio" name="answer{{ forloop.counter0 }}" value="b">
+                    {{ question.b }}
+                </label>
+                <label>
+                    <input type="radio" name="answer{{ forloop.counter0 }}" value="c">
+                    {{ question.c }}
+                </label>
+                <label>
+                    <input type="radio" name="answer{{ forloop.counter0 }}" value="d">
+                    {{ question.d }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="submit_button">Submit Answers</button>
+    </form>
+</div>
+
+<style>
+    body {
+        font-family: "Berlin Sans FB Demi", sans-serif;
+        background-color: #f5f5f5; 
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff; 
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+    }
+
+    h1 {
+        color: #050541;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .question {
+        margin-bottom: 20px;
+    }
+    
+    .question h2{
+        color: #8b2a00;
+    }
+
+    .options label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #333333; 
+        font-weight: bold
+    }
+
+    .options input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    .submit_button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #ff7f0e;
+        color: #ffffff; 
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .submit_button:hover {
+        background-color: #ffaa4c; 
+    }
+
+
+    @media screen and (max-width: 600px) {
+        .container {
+            padding: 10px;
+        }
+
+        .options label {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}

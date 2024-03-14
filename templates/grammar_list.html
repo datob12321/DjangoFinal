@@ -2,15 +2,93 @@
 {% block title %}Grammar list{% endblock %}
 
 {% block content %}
-    <h1>Grammar list</h1>
-    <br>
-    {% for topic in topics %}
-        <a href="{% url 'grammar_lessons' language.name topic.topic %}"><h1>{{ topic.topic }}</h1></a>
-    {% endfor %}
+    <h1 class="heading">Grammar Topics</h1>
+    <div class="topics-container">
+        {% for topic in topics %}
+            <a href="{% url 'grammar_lessons' language.name topic.topic %}" class="topic-link">
+                <div class="topic-card">
+                    <h2>{{ topic.topic }}</h2>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
 
     <style>
-    a{
-        text-decoration: none;
-    }
+        .heading {
+            font-size: 40px;
+            color: #ffea97;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .topics-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 15px;
+        }
+
+        .topic-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topic-card {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .topic-card h2 {
+            margin: 0;
+            font-size: 30px;
+            color: #444;
+        }
+
+        /* Ensure two rows of topics */
+        
+        @media only screen and (min-height: 1020px) {
+                    .topic-card h2 {
+            font-size: 50px;
+
+        }
+            .topics-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .heading{
+                font-size: 60px;
+            }
+
+        }
+        
+        @media only screen and (min-height: 1200px) {
+            .topics-container {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 50px;
+            }
+        }
+        
+        @media only screen and (max-width: 768px) {
+            .topics-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .topics-container {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 {% endblock %}

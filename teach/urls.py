@@ -8,5 +8,6 @@ urlpatterns = [
     path('<str:language>/add-grammar', views.add_grammar, name='add_grammar'),
     path('<str:language>/add-slang', views.add_slang, name='add_slang'),
     path('<str:language>/questions', views.questions_view, name='questions_view'),
-    path('<str:language>/make_answer', views.make_answer, name='make_answer')
+    path('<str:language>/make_answer', views.make_answer, name='make_answer'),
+    path('<str:language>/teacher_test', views.teacher_test, name='teacher_test')
 ]

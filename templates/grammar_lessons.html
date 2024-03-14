@@ -2,24 +2,68 @@
 {% block title %}Grammar lessons - {{ topic.topic }}{% endblock %}
 
 {% block content %}
-    <h1>Grammar lessons</h1>
-    <br>
-    {{ topic.topic }}
-    
+    <div class="main_div">
+    <h1 id="grammar_lessons">Grammar lessons</h1>
+    <h2 id="topic">{{ topic.topic }}</h2>
+
+    <div class="main">
+        <div class="main_list">
+
     <div class="main-names">
         {% for lesson in lessons %}
         <div class="lesson_name">
         <h2><a href="#">{{ lesson.grammar_name }}</a></h2>
         </div>
-        
+
         {% endfor %}
     </div>
-    
-    
-    <div id="lesson_div">
-    
     </div>
+
+
+
+    <div id="lesson_div">
+
+    </div>
+    </div>
+    </div>
+     
+
+
 <style>
+
+.main_div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+        padding: 15px;
+    gap: 10px;
+}
+
+.main{
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.main_list{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5px;
+    padding-left: 10px;
+    gap: 15px;
+}
+
+#grammar_lessons{
+    font-size: 40px;
+    color: #3d0404;
+}
+
+#topic{
+    font-size: 45px;
+    color: #ead5d5;
+}
+
 .main-names{
     width: 250px;
     font-size: 10px;
@@ -29,34 +73,192 @@
     font-size: small;
 }
 
-.lesson_name{
-    font-size: 10px;
+.main-names{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
+.lesson_name{
+    font-size: 10px;
+    border: solid darkgoldenrod 2px;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.lesson_name a{
+    color: #cbc7c7;
+    font-weight: bold;
+}
+
+.lesson_name:hover{
+    background-color: #f5af68;
+    a {
+        color: #2a0202;
+    }
+    cursor: pointer;
+}
 
 a{
     text-decoration: none;
     color: #1e1b1a;
 }
+
+#lesson_div{
+    background-color: beige;
+    padding: 15px;
+    border-radius: 10px;
+    max-height: 500px;
+    min-height: 300px;
+    overflow: auto;
+    font-size: 10px;
+    color: darkred;
+    display: none;
+    width: 70%;
+    margin-bottom: 30px;
+}
+#lesson_div pre{
+    font-size: 15px;
+    white-space: break-spaces;
+}
+
+#lesson_div::-webkit-scrollbar{
+    display: none;
+}
+
+@media only screen and (min-height: 1020px) {
+    .main{
+        flex-direction: column;
+        margin: auto;
+        align-items: center;
+    }
+
+    .main_list{
+        width: 100%;
+    }
+    .main-names{
+        width: 100%;
+
+    }
+    .main-names a{
+                font-size: 30px;
+    }
+
+    #lesson_div{
+        min-height: 300px;
+        max-height: 800px;
+    }
+
+    #lesson_div pre{
+        font-size: 30px;
+    }
+
+
+}
+ @media only screen and (max-width: 1200px) {
+        .main_list {
+            width: 80%;
+        }
+
+        #lesson_div {
+            width: 80%;
+        }
+    }
+
+    @media only screen and (max-width: 992px) {
+        .main_list {
+            width: 85%;
+        }
+
+        #lesson_div {
+            width: 85%;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .main {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main_list {
+            width: 90%;
+        }
+
+        #lesson_div {
+            width: 90%;
+        }
+    }
+
+    @media only screen and (max-width: 576px) {
+        .main_list {
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-names{
+            width: 100%;
+        }
+
+        #lesson_div {
+            width: 95%;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        .main_list {
+            width: 100%;
+        }
+
+        #lesson_div {
+            width: 100%;
+        }
+    }
+
+    /* Additional Media Queries for smaller devices */
+    @media only screen and (max-width: 360px) {
+        .main_list {
+            width: 100%;
+        }
+
+        #lesson_div {
+            width: 100%;
+        }
+    }
+
+    @media only screen and (max-width: 320px) {
+        .main_list {
+            width: 100%;
+        }
+
+        #lesson_div {
+            width: 100%;
+        }
+    }
 </style>
-    
+
     <script>
     var lesson_div = document.getElementById('lesson_div');
     var all_lessons = document.querySelectorAll('.lesson_name')
     var json_lessons = JSON.parse('{{ lessons_json | escapejs }}');
-    
+
     for (var i=0; i<json_lessons.length; i++){
         (function(index){
-            all_lessons[index].addEventListener('click', 
+            all_lessons[index].addEventListener('click',
             function(){
-                lesson_div.innerHTML=`<pre><h2>${json_lessons[index].fields.grammar_text}</h2></pre`
+                lesson_div.style.display = 'flex'
+                lesson_div.innerHTML=`<h2><pre>${json_lessons[index].fields.grammar_text}</pre></h2`
                 console.log(json_lessons[index].fields.grammar_text)
             })
         })(i)
     }
-    
-    
-    
-    
+
+
+
+
     </script>
 {% endblock %}
